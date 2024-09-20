@@ -4,6 +4,7 @@
  */
 package ej6p2lab;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -103,9 +104,27 @@ public class GestionProducto extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Stock:");
 
+        jTCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTCodigoKeyTyped(evt);
+            }
+        });
+
+        jTPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTPrecioKeyTyped(evt);
+            }
+        });
+
         jCombo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCombo2ActionPerformed(evt);
+            }
+        });
+
+        jSpinner1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jSpinner1KeyTyped(evt);
             }
         });
 
@@ -157,13 +176,38 @@ public class GestionProducto extends javax.swing.JInternalFrame {
                 .addGap(120, 120, 120))
         );
 
-        jButton1.setText("jButton1");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ej6p2lab/icons/icons8-producto-usado-50.png"))); // NOI18N
+        jButton1.setText("Nuevo");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ej6p2lab/icons/icons8-caja-de-producto-de-pelo-corto-50.png"))); // NOI18N
+        jButton2.setText("Guardar");
+        jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("jButton3");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ej6p2lab/icons/icons8-marca-doble-30.png"))); // NOI18N
+        jButton3.setText("Actualizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("jButton4");
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ej6p2lab/icons/icons8-eliminar-50.png"))); // NOI18N
+        jButton4.setText("Eliminar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -181,8 +225,8 @@ public class GestionProducto extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(35, 35, 35)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(33, 33, 33)
+                                .addComponent(jButton2)
+                                .addGap(27, 27, 27)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(33, 33, 33)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -253,23 +297,148 @@ public class GestionProducto extends javax.swing.JInternalFrame {
 
     private void jTProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTProductoMouseClicked
         int SelectedR = jTProducto.getSelectedRow();
-        
+
         if (SelectedR != -1) {
             jTCodigo.setText(jTProducto.getValueAt(SelectedR, 0).toString());
             jTDescripcion.setText(jTProducto.getValueAt(SelectedR, 1).toString());
             jTPrecio.setText(jTProducto.getValueAt(SelectedR, 2).toString());
             jCombo2.setSelectedItem(jTProducto.getValueAt(SelectedR, 3).toString().toUpperCase());
-           
+
             jSpinner1.setValue(Integer.parseInt(jTProducto.getValueAt(SelectedR, 4).toString()));
-            
+
         }
     }//GEN-LAST:event_jTProductoMouseClicked
 
     private void jCombo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCombo2ActionPerformed
-        
 
-        
+
     }//GEN-LAST:event_jCombo2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+           try{
+        int cod = Integer.parseInt(jTCodigo.getText());
+        String desc = jTDescripcion.getText().toString();
+        double pre = Double.parseDouble(jTPrecio.getText());
+        Rubro r = Rubro.valueOf(jCombo2.getSelectedItem().toString().toUpperCase());
+        int sto = Integer.parseInt(jSpinner1.getValue().toString());
+        Producto prod = new Producto(cod, r, desc, pre, sto);
+
+        if (VistaPrincipal.listaP.contains(prod)) {
+            JOptionPane.showMessageDialog(rootPane, "No se pudo guardar, el producto ya pertenece a esta lista");
+        } else {
+            VistaPrincipal.listaP.add(prod);
+            JOptionPane.showMessageDialog(rootPane, "Producto guardado con exito");
+
+        }
+           }catch(IllegalArgumentException ex){
+           JOptionPane.showMessageDialog(rootPane, "No debe haber campos vacios");
+           }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        try{
+        int cod = Integer.parseInt(jTCodigo.getText());
+        String desc = jTDescripcion.getText().toString();
+        double pre = Double.parseDouble(jTPrecio.getText());
+        Rubro r = Rubro.valueOf(jCombo2.getSelectedItem().toString().toUpperCase());
+        int sto = Integer.parseInt(jSpinner1.getValue().toString());
+        Producto prod = new Producto(cod, r, desc, pre, sto);
+
+        if (VistaPrincipal.listaP.contains(prod)) {
+            VistaPrincipal.listaP.remove(prod);
+            JOptionPane.showMessageDialog(rootPane, "Producto eliminado correctamente");
+        } else {
+
+            JOptionPane.showMessageDialog(rootPane, "No se pudo eliminar el producto");
+
+        }}catch(IllegalArgumentException ex){
+           JOptionPane.showMessageDialog(rootPane, "No debe haber campos vacios");
+           }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        borrarFilas();
+     try{
+        for (Producto pro : VistaPrincipal.listaP) {
+
+            if (pro.getRubro().name().equalsIgnoreCase(jComboCategoria.getSelectedItem().toString())) {
+
+                model.addRow(new Object[]{
+                    pro.getCodigo(),
+                    pro.getDescripcion(),
+                    pro.getPrecio(),
+                    pro.getRubro(),
+                    pro.getStock()
+
+                });
+            }
+        }
+       
+        for (Producto pp : VistaPrincipal.listaP) {
+            if (pp.getCodigo() == Integer.parseInt(jTCodigo.getText())) {
+                jButton2.setEnabled(true);
+                break;
+            }else{
+            jButton2.setEnabled(false);
+            }
+        }
+     }catch(IllegalArgumentException ex){
+     
+     
+     
+     }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //crear producto con el contenido de los jText
+        int co = Integer.parseInt(jTCodigo.getText());
+        String des = jTDescripcion.getText().toString();
+        double pr = Double.parseDouble(jTPrecio.getText());
+        Rubro ru = Rubro.valueOf(jCombo2.getSelectedItem().toString().toUpperCase());
+        int st = Integer.parseInt(jSpinner1.getValue().toString());
+        Producto pro = new Producto(co, ru, des, pr, st);
+        //ver si se encuentra el producto y si es asi, remplazarlo con la nueva info
+        
+        for (Producto lp : VistaPrincipal.listaP) {
+            
+            if (lp.getCodigo() == pro.getCodigo()) {
+                VistaPrincipal.listaP.remove(lp);
+                JOptionPane.showMessageDialog(rootPane, "Producto modificado con exito");
+                break;
+            }
+           
+        }
+        
+        VistaPrincipal.listaP.add(pro);
+        jButton2.setEnabled(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCodigoKeyTyped
+        char validar = evt.getKeyChar();
+        if (Character.isDigit(validar) == false) {
+           getToolkit().beep();
+           evt.consume();
+        }
+    }//GEN-LAST:event_jTCodigoKeyTyped
+
+    private void jTPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTPrecioKeyTyped
+        char validar = evt.getKeyChar();
+        if (Character.isDigit(validar) == false) {
+           getToolkit().beep();
+           evt.consume();
+        }
+    }//GEN-LAST:event_jTPrecioKeyTyped
+
+    private void jSpinner1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSpinner1KeyTyped
+        char validar = evt.getKeyChar();
+        if (Character.isDigit(validar) == false) {
+           getToolkit().beep();
+           evt.consume();
+        }
+    }//GEN-LAST:event_jSpinner1KeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -297,7 +466,7 @@ public class GestionProducto extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarCombo() {
-       
+
         jComboCategoria.addItem("Perfumeria");
         jComboCategoria.addItem("Limpieza");
         jComboCategoria.addItem("Comestible");
